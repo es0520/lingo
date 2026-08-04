@@ -1,0 +1,9 @@
+{
+  "name": "Lingo — 나만의 단어장",
+  "short_name": "Lingo",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#f8f8fc",
+  "theme_color": "#6256e8",
+  "icons": [{ "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }]
+}
