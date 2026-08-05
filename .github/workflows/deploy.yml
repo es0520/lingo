@@ -43,6 +43,10 @@ jobs:
           sed -i "s|YOUR_SUPABASE_URL|$SUPABASE_URL|" config.js
           sed -i "s|YOUR_SUPABASE_PUBLISHABLE_KEY|$SUPABASE_PUBLISHABLE_KEY|" config.js
           echo "Configured SUPABASE_URL host: $(echo $SUPABASE_URL | sed -E 's#https://([^/]+).*#\1#')"
+      - name: Bust caches for this deploy
+        run: |
+          sed -i "s|\./config\.js|./config.js?v=${GITHUB_SHA}|" app.js
+          sed -i "s|app\.js?v=[^\"']*|app.js?v=${GITHUB_SHA}|" index.html
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
