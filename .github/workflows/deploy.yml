@@ -27,9 +27,22 @@ jobs:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_PUBLISHABLE_KEY: ${{ secrets.SUPABASE_PUBLISHABLE_KEY }}
         run: |
+          if [ -z "$SUPABASE_URL" ]; then
+            echo "::error::SUPABASE_URL secret is empty. Go to Settings > Secrets and variables > Actions > Repository secrets and set SUPABASE_URL to the full Project URL (https://xxxx.supabase.co)."
+            exit 1
+          fi
+          if [[ "$SUPABASE_URL" != https://* ]]; then
+            echo "::error::SUPABASE_URL secret ('$SUPABASE_URL') does not start with https://. It must be the full Project URL, not just the project ref."
+            exit 1
+          fi
+          if [ -z "$SUPABASE_PUBLISHABLE_KEY" ]; then
+            echo "::error::SUPABASE_PUBLISHABLE_KEY secret is empty. Go to Settings > Secrets and variables > Actions > Repository secrets and set it."
+            exit 1
+          fi
           cp config.example.js config.js
           sed -i "s|YOUR_SUPABASE_URL|$SUPABASE_URL|" config.js
           sed -i "s|YOUR_SUPABASE_PUBLISHABLE_KEY|$SUPABASE_PUBLISHABLE_KEY|" config.js
+          echo "Configured SUPABASE_URL host: $(echo $SUPABASE_URL | sed -E 's#https://([^/]+).*#\1#')"
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
